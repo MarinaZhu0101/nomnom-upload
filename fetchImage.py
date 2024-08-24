@@ -13,15 +13,23 @@ import PIL
 
 app = Flask(__name__)
 
-genai.configure(api_key=os.environ["API_KEY"])
+api_key = os.getenv('API_KEY')
+aws_access_key_id = os.getenv('aws_access_key_id')
+aws_secret_access_key = os.getenv('aws_secret_access_key')
+
+print("API_KEY:", api_key)
+print("aws_access_key_id:", aws_access_key_id)
+print("aws_secret_access_key:", aws_secret_access_key)
+
+genai.configure(api_key=os.getenv("API_KEY"))
 model = genai.GenerativeModel('gemini-1.5-flash')
 CORS(app)
 
 # Initialize the S3 client
 # s3 = boto3.client('s3')
 s3 = boto3.client('s3', region_name='eu-west-1',
-                  aws_access_key_id=os.getenv('AKIA6ODU2WFB5LY5KCVI'),
-                  aws_secret_access_key=os.getenv('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'))
+                  aws_access_key_id=os.getenv('aws_access_key_id'),
+                  aws_secret_access_key=os.getenv('aws_secret_access_key'))
 
 @app.route('/fetch-image')
 def fetch_image():
