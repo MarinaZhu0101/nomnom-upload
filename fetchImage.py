@@ -107,53 +107,7 @@ def extract_text(source, filename):
     format = '''{"restaurants": [{"name": "" (stays empty),"cuisine": "" (stays empty),"tags": [] (stays empty),"menu": {"categories": [{"name": "Starters" (or any other expressive category/heading),"dishes": [{"name": "string","description": "string" (if legible),"price": "number","note": "string" (for example vegan, vegetarian, gluten-free etc.)},{"name": "string","description": "string","price": "number","note": "string"}]},{"name": "Main Dishes","dishes": [{"name": "string","description": "string","price": "number","note": "string"},{"name": "string","description": "string","price": "number","note":
     "string"}]}]}}]}'''
 
-    format_02 = '''{
-    "restaurants": [
-        {
-            "name": "",
-            "cuisine": "" ,
-            "tags": [],
-            "menu": {
-                "categories": [
-                    {
-                        "name": "Starters" ,
-                        "dishes": [
-                            {
-                                "name": "string",
-                                "description": "string",
-                                "price": "number",
-                                "note": "string"
-                            },
-                            {
-                                "name": "string",
-                                "description": "string",
-                                "price": "number",
-                                "note": "string"
-                            }
-                        ]
-                    },
-                    {
-                        "name": "Main Dishes",
-                        "dishes": [
-                            {
-                                "name": "string",
-                                "description": "string",
-                                "price": "number",
-                                "note": "string"
-                            },
-                            {
-                                "name": "string",
-                                "description": "string",
-                                "price": "number",
-                                "note": "string"
-                            }
-                        ]
-                    }
-                ]
-            }
-        }
-    ]
-}'''
+    format_02 = '''{"restaurants": [ { "name": "", "cuisine": "" , "tags": [], "menu": { "categories": [ { "name": "Starters" , "dishes": [ { "name": "string", "description": "string", "price": "number", "note": "string" }, { "name": "string", "description": "string", "price": "number", "note": "string" } ] }, { "name": "Main Dishes", "dishes": [ { "name": "string", "description": "string", "price": "number", "note": "string" }, { "name": "string", "description": "string", "price": "number", "note": "string" } ] } ] } } ] }'''
 
     # response = model.generate_content(["Extract the text information and put it into a simple structured JSON table with following structure: " + ' "categories": [ {"name": "Starters", "dishes": [ { "name": "string", "description": "string", "price": "number", "note": "string" }, { "name": "string", "description": "string" (if legible), "price": "number", "note": "string" } ] }, { "name": "Main Dishes", "dishes": [ { "name": "string", "description": "string", "price": "number" }, { "name": "string", "description": "string", "price": "number" }]}]. The default for "note" is empty, if there is information about add-ons or similar things, then insert "Add-ons available." ' , img], stream=True)
 
