@@ -13,22 +13,14 @@ import PIL
 
 app = Flask(__name__)
 
-api_key = os.getenv('API_KEY')
-aws_access_key_id = os.getenv('aws_access_key_id')
-aws_secret_access_key = os.getenv('aws_secret_access_key')
-
-print("API_KEY:", api_key)
-print("aws_access_key_id:", aws_access_key_id)
-print("aws_secret_access_key:", aws_secret_access_key)
-
 genai.configure(api_key=os.getenv("API_KEY"))
 model = genai.GenerativeModel('gemini-1.5-flash')
 CORS(app)
 
-# Initialize the S3 client
-# s3 = boto3.client('s3')
+# Initialize the S3 client AKIA6ODU2WFB5LY5KCVI
+# s3 = boto3.client('s3') cb5Qw7tDmgOC2txaN9yiVeDbRMwkjVHNsp9eex8w
 s3 = boto3.client('s3', region_name='eu-west-1',
-                  aws_access_key_id=os.getenv('aws_access_key_id'),
+                  aws_access_key_id=os.getenv('aws_access_key_id'), 
                   aws_secret_access_key=os.getenv('aws_secret_access_key'))
 
 @app.route('/fetch-image')
@@ -43,7 +35,7 @@ def fetch_image():
         # Fetch the image from the S3 bucket
         print("Getting object...")
         s3_response = s3.get_object(Bucket=bucket_name, Key=image_key)
-        print("s3 response success!")
+        print("s3 blabliblub response success!")
         image_data = s3_response['Body'].read()
         
         # Create an in-memory bytes buffer to send the image
@@ -115,9 +107,57 @@ def extract_text(source, filename):
     format = '''{"restaurants": [{"name": "" (stays empty),"cuisine": "" (stays empty),"tags": [] (stays empty),"menu": {"categories": [{"name": "Starters" (or any other expressive category/heading),"dishes": [{"name": "string","description": "string" (if legible),"price": "number","note": "string" (for example vegan, vegetarian, gluten-free etc.)},{"name": "string","description": "string","price": "number","note": "string"}]},{"name": "Main Dishes","dishes": [{"name": "string","description": "string","price": "number","note": "string"},{"name": "string","description": "string","price": "number","note":
     "string"}]}]}}]}'''
 
+    format_02 = '''{
+    "restaurants": [
+        {
+            "name": "",
+            "cuisine": "" ,
+            "tags": [],
+            "menu": {
+                "categories": [
+                    {
+                        "name": "Starters" ,
+                        "dishes": [
+                            {
+                                "name": "string",
+                                "description": "string",
+                                "price": "number",
+                                "note": "string"
+                            },
+                            {
+                                "name": "string",
+                                "description": "string",
+                                "price": "number",
+                                "note": "string"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Main Dishes",
+                        "dishes": [
+                            {
+                                "name": "string",
+                                "description": "string",
+                                "price": "number",
+                                "note": "string"
+                            },
+                            {
+                                "name": "string",
+                                "description": "string",
+                                "price": "number",
+                                "note": "string"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}'''
+
     # response = model.generate_content(["Extract the text information and put it into a simple structured JSON table with following structure: " + ' "categories": [ {"name": "Starters", "dishes": [ { "name": "string", "description": "string", "price": "number", "note": "string" }, { "name": "string", "description": "string" (if legible), "price": "number", "note": "string" } ] }, { "name": "Main Dishes", "dishes": [ { "name": "string", "description": "string", "price": "number" }, { "name": "string", "description": "string", "price": "number" }]}]. The default for "note" is empty, if there is information about add-ons or similar things, then insert "Add-ons available." ' , img], stream=True)
 
-    first_response = model.generate_content(["Extract the text information and put it into a simple but valid structured JSON table with following structure: " + format + '. Please always include "categories". The default for "note" is empty. If there is information about things you can add extra to your dish or add-ons in general or toppings or similar things that do not have a price, ignore it. Do not allow "build your own meal, dish, food" things. ' , source], stream=True)
+    first_response = model.generate_content(["Extract the text information and put it into a simple but valid structured JSON table with following structure: " + format_02 + '. Please include "categories" as an attribute. The default for "note" is empty. If there is information about things you can add extra to your dish or add-ons in general or toppings or similar things that do not have a price, ignore it. Ignore "build your own meal, dish, food" things. ' , source], stream=True)
 
     first_response.resolve()
 
